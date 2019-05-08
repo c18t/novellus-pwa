@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <p id="load">Firebase SDK Loading&hellip;</p>
+    <p id="book"></p>
     <img alt="Vue logo" src="../assets/logo.png" />
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
   </div>
@@ -18,6 +19,14 @@ import * as firebase from "firebase/app";
 })
 export default class Home extends Vue {
   mounted() {
+    fetch("book.html")
+      .then(response => {
+        return response.text();
+      })
+      .then(responseText => {
+        document.getElementById("book")!.innerHTML = responseText;
+      });
+
     // Initialize Firebase
     const config = {
       apiKey: "AIzaSyC2eTEc31KWhEutmuSgT2VSwoB6Z5ENBfE",
