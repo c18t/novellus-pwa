@@ -4,8 +4,7 @@
     <p id="book">
       <button @click="hoge">bbbbb</button>
     </p>
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <pre id="result"></pre>
   </div>
 </template>
 
@@ -60,6 +59,25 @@ var device: Device = {
         }
       }, 10);
     })
+  },
+  Fetch: (url: string): Promise<string> => {
+    let uuid = uuidv4();
+    window.Device_Fetch(JSON.stringify({ UUID: uuid, url: url }));
+    return new Promise<string>((resolve: (data: string) => void, reject: (reason?: any) => void) => {
+      let data: string | null = null;
+      let id: NodeJS.Timer | null = null;
+      let count: number = 1000;
+      id = setInterval(() => {
+        if ((data = window.ReceiveDeviceResult(uuid)) != null) {
+          clearInterval(id!);
+          resolve(data);
+        }
+        else if (--count <= 0) {
+          clearInterval(id!);
+          reject();
+        }
+      }, 10);
+    })
   }
 }
 
@@ -84,10 +102,18 @@ export default class Home extends Vue {
         alert(req.message);
       }
     }
+    if (typeof window.Device_Fetch != "function") {
+      window.Device_Fetch = (json: string) => {
+        let req = JSON.parse(json);
+        window.SetDeviceResult(req["UUID"], JSON.stringify({ content: "hoge" }));
+      }
+    }
 
     device.Alert('Hello! ガワネイティブ');
     device.Time()
       .then(json => document.getElementById("book")!.innerHTML = json)
+    device.Fetch('https://bin.chimata.org/keshipon.cgi')
+      .then(content => document.getElementById("result")!.innerHTML = content)
   }
 
   mounted() {

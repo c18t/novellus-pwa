@@ -4,9 +4,11 @@ declare interface Window {
 
   Device_Alert(data: string): void;
   Device_Time(data: string): void;
+  Device_Fetch(data: string): void;
 }
 
 declare interface Device {
   Alert(message: string): void;
   Time(): Promise<string>;
+  Fetch(url: string): Promise<string>;
 }
