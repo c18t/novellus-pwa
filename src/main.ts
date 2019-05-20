@@ -6,6 +6,10 @@ import "./registerServiceWorker";
 
 Vue.config.productionTip = false;
 
+Vue.config.errorHandler = (err, vm, info) => {
+  document.getElementById("result")!.textContent = err.message;
+};
+
 new Vue({
   router,
   store,
