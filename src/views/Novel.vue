@@ -36,24 +36,7 @@ import device from "../device";
 export default class Home extends Vue {
 
   hoge() {
-    device.Fetch('https://www.aozora.gr.jp/cards/000148/files/773_14560.html')
-//    device.Fetch('https://bin.chimata.org/keshipon.cgi')
-      .then(response => {
-        try {
-          const contentBase64 = JSON.parse(response).content;
-          const contentBinary = encoding.base64Decode(contentBase64);
-          const contentSJIS = encoding.convert(contentBinary, { from: "BINARY", to: "SJIS" }) as number[];
-          const contentUnicode = encoding.convert(contentSJIS, { from: "SJIS", to: "UNICODE" }) as number[];
-          const content = encoding.codeToString(contentUnicode);
-          document.getElementById("result")!.innerHTML = content;
-          // let elem = new DOMParser().parseFromString(content, "text/html").querySelector(".main_text");
-          // if (elem != null) {
-          //   document.getElementById("result")!.innerHTML = elem.outerHTML || "";
-          // }
-        } catch (error) {
-            document.getElementById("result")!.textContent = error;
-        }
-      });
+    window.ShowNovel('https://www.aozora.gr.jp/cards/000148/files/773_14560.html');
   }
 
   mounted() {
